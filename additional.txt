@@ -1,0 +1,35 @@
+if (eegDataSource == DATASOURCE_CYTON) {
+    updateToNChan(16);
+    chanButton16.setColorNotPressed(isSelected_color); 
+    // WiFi autoconnect is used for "Dynamic IP"
+    wifiIPAddressDynamic.setColorNotPressed(isSelected_color);
+    wifiIPAddressStatic.setColorNotPressed(colorNotPressed);
+} else if (eegDataSource == DATASOURCE_GANGLION) {
+    updateToNChan(16);
+    wifiIPAddressDynamic.setColorNotPressed(isSelected_color);
+    wifiIPAddressStatic.setColorNotPressed(colorNotPressed);
+} else if (eegDataSource == DATASOURCE_PLAYBACKFILE) {
+    //GUI auto detects number of channels for playback when file is selected
+} else if (eegDataSource == DATASOURCE_SYNTHETIC) {
+    synthChanButton16.setColorNotPressed(isSelected_color);
+} else if (eegDataSource == DATASOURCE_NOVAXR) {
+    selectedSamplingRate = 250; //default sampling rate
+}
+
+///////////////////////////////////////////////////////////////////////////
+private LinkedList<String> getCytonComPorts() {
+    final SerialPort[] comPorts = SerialPort.getCommPorts();
+    LinkedList<String> results = new LinkedList<String>();
+
+    for (SerialPort comPort : comPorts) {
+        String portName = comPort.getSystemPortName();
+        println("Detected Port: " + portName);
+
+        // Force detection of COM4 (your Cyton Board)
+        if (portName.contains("COM4") || portName.contains("Silicon Labs CP210x")) {
+            println("Cyton Dongle detected on: " + portName);
+            results.add(portName);
+        }
+    }
+    return results;
+}
